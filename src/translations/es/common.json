@@ -1,0 +1,40 @@
+{
+    "title": "Future",
+    "dashboard": {
+        "title": "Dashboard",
+        "error": "Algo fue mal con la consulta al API!",
+        "table": {
+            "title": "Información",
+            "ags": "Código",
+            "name": "Ciudad",
+            "date": "Fecha",
+            "cases": "Casos"
+        },
+        "chart": {
+            "title": "Cambio diario"
+        },
+        "update": {
+            "title": "Última actualización",
+            "more": "Aprender más"
+        }
+    },
+    "about": {
+        "Q1": "Más sobre Covid-19",
+        "AnswerQ1": "Puede obtener más información sobre Covid-19 en ",
+        "Q2": "Más sobre Future",
+        "AnswerQ2": "Obtenga más información sobre Futurer en el sitio oficial ",
+        "Q3": "Más sobre esta página",
+        "AnswerQ3": "Acerca de la prueba de selección de personal de ingeniería de Future en el archivo README.md "
+    },
+    "drawer": {
+        "dashboard": "Tablero",
+        "about": "Más Info",
+        "home": "Inicio",
+        "termsandconditions": "Términos y condiciones",
+        "threezerofive": "305",
+        "cards": "Personajes",
+        "plots": "Tramas",
+        "game": "Empleado"
+    },
+    "footer": "Future"
+}
