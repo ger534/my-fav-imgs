@@ -37,17 +37,12 @@ function Login(props) {
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
-                console.log("user", user)
                 sessionStorage.setItem('user', JSON.stringify(user));
                 navigate(0)
             })
             .catch((error) => {
-                console.log("error")
-                console.log(error)
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log("errorCode", errorCode)
-                console.log("errorMessage", errorMessage)
                 if(errorCode === "auth/user-not-found"){
                     setError("Este email no ha sido registrado.")
                 } else if(errorCode === "auth/internal-error"){
@@ -68,8 +63,8 @@ function Login(props) {
             {contextUser ? <>
                 <Container style={matches ? { width: "50%" } : { height: "100vh" }}>
                     <h1 style={{ textAlign: "center" }}>Actualmente en sesión con el correo: {contextUser.email}</h1>
-                    <Button fullWidth variant="contained" color="error" onClick={logout}>Cerrar sesión</Button>
-                    <Button fullWidth variant="contained" color="primary" onClick={() => navigate('/')}>Administrar mis imágenes</Button>
+                    <Button fullWidth variant="contained" style={{ backgroundColor: "#ff4702" }} onClick={() => navigate('/')}>Administrar mis imágenes</Button>
+                    <Button fullWidth variant="contained" style={{ backgroundColor: "#ffdacc", color: "#ff4702" }} onClick={logout}>Cerrar sesión</Button>
                 </Container>
             </> : <>
                 <Container style={matches ? { width: "50%" } : { height: "100vh" }}>
@@ -97,7 +92,8 @@ function Login(props) {
                     />
                     <p>{error}</p>
                     <p>¿No tienes cuenta? <span style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }} onClick={() => { navigate("/signup") }}>regístrate</span></p>
-                    <Button fullWidth variant="contained" color="primary" onClick={login}>Iniciar sesión</Button>
+                    <Button fullWidth variant="contained" style={{ backgroundColor: "#ff4702" }} onClick={login}>Iniciar sesión</Button>
+                    <Button fullWidth variant="contained" style={{ backgroundColor: "#ffdacc", color: "#ff4702" }} onClick={() => navigate('/')}>Volver</Button>
                 </Container>
             </>}
         </>

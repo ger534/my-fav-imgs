@@ -42,7 +42,6 @@ export default function Appbar(props) {
     };
     const handleLanguageClose = (lan, event) => {
         if (typeof lan === 'string') {
-            console.log("lan", lan)
             if (lan.toString() !== 'es') {
                 //open WIP modal here
                 setOpenLanWIP(true)

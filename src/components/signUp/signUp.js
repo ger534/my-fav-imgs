@@ -38,15 +38,12 @@ function SignUp(props) {
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
-                console.log("user", user)
                 sessionStorage.setItem('user', JSON.stringify(user));
                 navigate("/login")
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log("errorCode", errorCode)
-                console.log("errorMessage", errorMessage)
                 if (errorCode === "auth/missing-email") {
                     setError("Ingrese una dirección electrónica válida.")
                 } else if (errorCode === "auth/internal-error") {
@@ -85,7 +82,8 @@ function SignUp(props) {
                     fullWidth
                 />
                 <p>{error}</p>
-                <Button fullWidth variant="contained" color="primary" onClick={signUp} disabled={!validateEmail(email)}>Registrarse</Button>
+                <Button fullWidth variant="contained" style={{ backgroundColor: "#ff4702" }} onClick={signUp} disabled={!validateEmail(email)}>Registrarse</Button>
+                <Button fullWidth variant="contained" style={{ backgroundColor: "#ffdacc", color: "#ff4702" }} onClick={() => navigate('/login')}>Volver</Button>
             </Container>
         </>
     )

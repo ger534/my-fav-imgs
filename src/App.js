@@ -21,8 +21,6 @@ function App() {
     setUser(JSON.parse(localStorage.getItem('user')))
   };
   
-  console.log("app, ", user)
-
   return (
     <>
     <br></br><br></br><br></br>
