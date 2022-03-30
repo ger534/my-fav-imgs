@@ -50,7 +50,7 @@ function Login(props) {
                 } else if(errorCode === "auth/invalid-email"){
                     setError("La dirección de correo electrónico no es válida.")
                 }else{
-                    setError("Ha ocurrido un error.")
+                    setError("Ha ocurrido un error " + errorMessage)
                 }
                 
             });

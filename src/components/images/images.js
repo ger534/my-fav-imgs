@@ -14,7 +14,6 @@ import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { collection, deleteDoc, getDocs, getFirestore, query, where } from "firebase/firestore";
 import { doc } from "firebase/firestore";
 import { setDoc } from "firebase/firestore";
-import Modal from '../modal/modal';
 import { useNavigate } from 'react-router-dom';
 
 import EditModal from './editModal/editModal'
@@ -33,7 +32,7 @@ function Images(props) {
 
     const [title, setTitle] = useState("");
 
-    const { loading, setLoading } = props;
+    const { setLoading } = props;
 
     const matches = useMediaQuery('(min-width:700px)');
 
@@ -131,15 +130,6 @@ function Images(props) {
         setEditionFlag(true)
     }
 
-    const editImage = (img) => {
-        setLoading(true)
-        deleteDoc(doc(db, "images", img.id)).then(() => {
-            alert(`Imagen editada en la DB.`)
-            setLoading(false)
-        }
-        );
-    }
-
     return (
         <>
             <Container style={matches ? { textAlign: "center", width: "70%" } : { textAlign: "center", height: "100vh" }}>
@@ -161,7 +151,7 @@ function Images(props) {
                                 {/*matches ? <><PhotoCameraIcon /> Escoge una imagen</> : <PhotoCameraIcon />*/}
                             </Button>
                         </label></Box>
-                    {image && <div style={{ textAlign: "center" }}><p>Vista previa: </p><img src={preview} width={"50%"} /></div>}
+                    {image && <div style={{ textAlign: "center" }}><p>Vista previa: </p><img src={preview} srcSet={preview} alt={"preview"} loading="lazy" width={"50%"} /></div>}
                     <Button variant="contained" onClick={uploadImage} style={{ backgroundColor: "#ff4702", fontWeight: "bold" }} disabled={title === "" || !preview || !props.user.uid}>
                         Guardar entrada</Button>
 

@@ -1,20 +1,18 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, ImageList, ImageListItem, ImageListItemBar, TextField, useMediaQuery } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 
-import IconButton from '@mui/material/IconButton';
 import { Box } from '@mui/system';
 import { styled } from '@mui/material/styles';
 
-
-import ClearIcon from '@mui/icons-material/Clear';
-import EditIcon from '@mui/icons-material/Edit';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
 //firestore
-import { collection, deleteDoc, getDocs, getFirestore, query, where } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 import { doc } from "firebase/firestore";
 import { setDoc } from "firebase/firestore";
 import { useNavigate } from 'react-router-dom';
+
+//HOC
 import LoadingHOC from '../../loading/LoadingHOC';
 
 const Input = styled('input')({
@@ -28,7 +26,7 @@ function EditModal({ selectedImage, editionFlag, setEditionFlag, ...props }) {
 
     const [title, setTitle] = useState("");
 
-    const { loading, setLoading } = props;
+    const { setLoading } = props;
 
     const navigate = useNavigate();
 
@@ -47,19 +45,6 @@ function EditModal({ selectedImage, editionFlag, setEditionFlag, ...props }) {
         });
     };
 
-    const uploadImage = () => {
-        convertToBase64(newImage).then(img => {
-            setDoc(doc(collection(db, "images")), {
-                title: title,
-                image: img,
-                user: props.user.uid
-            }).then(() => {
-                alert(`Imagen guardada en la DB.`)
-                navigate(0)
-            })
-        })
-    }
-
     useEffect(() => {
         if (!newImage) {
             setNewImagePreview(undefined)
@@ -77,7 +62,7 @@ function EditModal({ selectedImage, editionFlag, setEditionFlag, ...props }) {
 
     const editImage = () => {
 
-        if(newImagePreview){
+        if (newImagePreview) {
             setLoading(true)
             convertToBase64(newImage).then(img => {
                 setDoc(doc(db, "images", selectedImage.id), {
@@ -88,17 +73,17 @@ function EditModal({ selectedImage, editionFlag, setEditionFlag, ...props }) {
                     alert(`Imagen guardada en la DB.`)
                     setLoading(false)
                     navigate(0)
-                }).catch((error)=>{
-                    if(error == "FirebaseError: [code=invalid-argument]: The value of property \"image\" is longer than 1048487 bytes."){
+                }).catch((error) => {
+                    if (error == "FirebaseError: [code=invalid-argument]: The value of property \"image\" is longer than 1048487 bytes.") {
                         alert(`La imagen es demasiado grande, por favor seleccione otra.`)
                         setLoading(false)
-                    }else{
+                    } else {
                         alert(`${error}`)
                         setLoading(false)
                     }
                 })
             })
-        }else{
+        } else {
             setLoading(true)
             setDoc(doc(db, "images", selectedImage.id), {
                 title: title,
@@ -121,7 +106,7 @@ function EditModal({ selectedImage, editionFlag, setEditionFlag, ...props }) {
                 onClose={setEditionFlag}
             >
                 <DialogContent>
-                    <Box style={{ textAlign: "center"}}
+                    <Box style={{ textAlign: "center" }}
                     >
                         <TextField value={title} onChange={(e) => { setTitle(e.target.value) }} fullWidth></TextField> <br></br>
                         {!newImagePreview ? <img
@@ -130,7 +115,12 @@ function EditModal({ selectedImage, editionFlag, setEditionFlag, ...props }) {
                             alt={selectedImage.title}
                             loading="lazy"
                             width={"100%"}
-                        /> : <img src={newImagePreview} width={"100%"} />} <br></br>
+                        /> : <img
+                            src={newImagePreview}
+                            srcSet={newImagePreview}
+                            alt={"edit-preview"}
+                            loading="lazy"
+                            width={"100%"} />} <br></br>
                         <label htmlFor="contained-button-file-edition">
                             <Input accept="image/*" id="contained-button-file-edition" type="file" onChange={(e) => { setNewImage(e.target.files[0]) }} />
                             <Button variant="contained" component="span" style={{ backgroundColor: "#ffdacc", color: "#ff4702" }}>

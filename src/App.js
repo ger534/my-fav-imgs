@@ -30,8 +30,8 @@ function App() {
 
           <Routes>
             {/* auth paths */}
-            <Route path="/login" element={<Login/>} />
-            <Route path="/signup" element={<SignUp/>} />
+            <Route path="/login" element={<Login onUserChange={onUserChange}/>} />
+            <Route path="/signup" element={<SignUp onUserChange={onUserChange}/>} />
             <Route path="/" element={<Images user={user}/>} />
           </Routes>
         </Router>

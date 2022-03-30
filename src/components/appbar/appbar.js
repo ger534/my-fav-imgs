@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 
 /* third party packages */
-import clsx from 'clsx';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Badge from '@mui/material/Badge';
 import Typography from '@mui/material/Typography';
 import { useTranslation } from 'react-i18next';
-import { Button, Menu, MenuItem, useMediaQuery } from '@mui/material';
+import { Button, Menu, MenuItem } from '@mui/material';
 import { Box } from '@mui/system';
 
 /* icons */
@@ -27,8 +26,6 @@ export default function Appbar(props) {
     const contextUser = JSON.parse(sessionStorage.getItem('user'));
 
     const navigate = useNavigate();
-
-    const matches = useMediaQuery('(min-width:1200px)');
 
     //WIP language dialog
     const [openLanWIP, setOpenLanWIP] = useState(false);
