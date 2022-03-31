@@ -5,7 +5,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { initializeApp } from "firebase/app";
 import app from './helpers/firebase/firebase';
-import './i18n';
 
 //firebase
 initializeApp(app)
