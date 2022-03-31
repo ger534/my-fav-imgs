@@ -31,7 +31,7 @@ export default function Appbar(props) {
 
                     {/* logo */}
                     <Typography component="h1" variant="h6" color="inherit" noWrap>
-                        My favorite images
+                        My Favorite Images
                     </Typography>
                     <Box sx={{ flexGrow: 1 }} />
                     {/* authentication */}

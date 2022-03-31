@@ -1,8 +1,15 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+test('renders appbar component', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const appbarRender = screen.getByText(/My Favorite Images/i);
+  expect(appbarRender).toBeInTheDocument();
 });
+
+test('renders images component', () => {
+  render(<App />);
+  const imagesRender = screen.getByText(/¡Crea tu propio álbum!/i);
+  expect(imagesRender).toBeInTheDocument();
+});
+

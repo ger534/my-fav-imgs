@@ -1,9 +1,4 @@
-import './App.css';
-
 import { useState } from "react";
-
-/* third party packages */
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 /* components */
 import Login from "./components/login/login";
@@ -11,7 +6,21 @@ import SignUp from "./components/signUp/signUp";
 import Appbar from './components/appbar/appbar';
 import Images from './components/images/images';
 
+/* firebase */
+import { initializeApp } from "firebase/app";
+import app from './helpers/firebase/firebase';
+
+/* routing */
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+/* styling */
+import './App.css';
+import { Container } from "@mui/material";
+
 function App() {
+
+  //firebase
+  initializeApp(app)
 
   /* authentication */
   const [user, setUser] = useState(JSON.parse(sessionStorage.getItem('user')) ? JSON.parse(sessionStorage.getItem('user')) : {});
@@ -20,21 +29,22 @@ function App() {
     localStorage.setItem('user', JSON.stringify(user))
     setUser(JSON.parse(localStorage.getItem('user')))
   };
-  
+
   return (
     <>
-    <br></br><br></br><br></br>
+      <Container id="app-container">
         <Router>
-          <Appbar/>
+          <Appbar />
 
 
           <Routes>
             {/* auth paths */}
-            <Route path="/login" element={<Login onUserChange={onUserChange}/>} />
-            <Route path="/signup" element={<SignUp onUserChange={onUserChange}/>} />
-            <Route path="/" element={<Images user={user}/>} />
+            <Route path="/login" element={<Login onUserChange={onUserChange} />} />
+            <Route path="/signup" element={<SignUp onUserChange={onUserChange} />} />
+            <Route path="/" element={<Images user={user} />} />
           </Routes>
         </Router>
+      </Container>
     </>
   );
 }
