@@ -1,6 +1,26 @@
-.sign-in {
-    color: #282c34;
-    background: white;
-    max-width: 400px;
-    margin: 0 auto;
-  }
+#title {
+  text-align: center;
+}
+
+#email-input {
+  background-color: white;
+}
+
+#password-input {
+  background-color: white;
+}
+
+#register {
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
+}
+
+#main-option-button {
+  background-color: #ff4702;
+}
+
+#second-option-button {
+  background-color: #ffdacc;
+  color: #ff4702;
+}

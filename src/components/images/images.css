@@ -1,0 +1,32 @@
+.upload-form {
+    display: flex;
+    flex-direction: column;
+}
+
+#upload-image {
+    display: flex;
+    flex-direction: row;
+    width: 100%
+}
+
+#submit-button {
+    background-color: #ff4702;
+    font-weight: bold;
+}
+
+#preview { 
+    text-align: center;
+}
+
+#upload-image-button{ 
+    display: flex;
+}
+
+#upload-image-button-color{ 
+    background-color: #ffdacc; 
+    color: #ff4702;
+}
+
+#image-title{
+    text-align: left; 
+}

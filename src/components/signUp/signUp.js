@@ -9,7 +9,7 @@ import { Button, Container, Input, useMediaQuery } from '@mui/material';
 //routing
 import { useNavigate } from "react-router-dom";
 
-/* style */
+/* styling */
 import './signUp.css'
 
 function SignUp(props) {
@@ -51,7 +51,7 @@ function SignUp(props) {
                 } else if (errorCode === "auth/invalid-email") {
                     setError("La dirección de correo electrónico no es válida.")
                 } else {
-                    setError("Ha ocurrido un error.")
+                    setError("Ha ocurrido un error " + errorMessage)
                 }
             });
     }
@@ -60,30 +60,28 @@ function SignUp(props) {
         <>
             <br></br>
             <Container style={matches ? { width: "50%" } : { height: "100vh" }}>
-                <h1 style={{ textAlign: "center" }}>Registrarse</h1>
+                <h1 id="title">Registrarse</h1>
                 <Input
-                    style={{ backgroundColor: "white" }}
+                    id="email-input"
                     placeholder="Email"
                     label="Email"
-                    id="email"
                     onChange={e => setEmail(e.target.value)}
                     type="email"
                     value={email}
                     fullWidth
                 />
                 <Input
-                    style={{ backgroundColor: "white" }}
+                    id="password-input"
                     placeholder="Password"
                     label="Password"
-                    id="password"
                     onChange={e => setPassword(e.target.value)}
                     type="password"
                     value={password}
                     fullWidth
                 />
                 <p>{error}</p>
-                <Button fullWidth variant="contained" style={{ backgroundColor: "#ff4702" }} onClick={signUp} disabled={!validateEmail(email)}>Registrarse</Button>
-                <Button fullWidth variant="contained" style={{ backgroundColor: "#ffdacc", color: "#ff4702" }} onClick={() => navigate('/login')}>Volver</Button>
+                <Button fullWidth variant="contained" id="main-option-button" onClick={signUp} disabled={!validateEmail(email)}>Registrarse</Button>
+                <Button fullWidth variant="contained" id="second-option-button" onClick={() => navigate('/login')}>Volver</Button>
             </Container>
         </>
     )

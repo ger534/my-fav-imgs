@@ -9,7 +9,7 @@ import { Button, Container, Input, useMediaQuery } from '@mui/material';
 //routing
 import { useNavigate } from "react-router-dom";
 
-/* style */
+/* styling */
 import './login.css'
 
 function Login(props) {
@@ -62,18 +62,17 @@ function Login(props) {
             {/* BIENVENIDO A ... */}
             {contextUser ? <>
                 <Container style={matches ? { width: "50%" } : { height: "100vh" }}>
-                    <h1 style={{ textAlign: "center" }}>Actualmente en sesión con el correo: {contextUser.email}</h1>
-                    <Button fullWidth variant="contained" style={{ backgroundColor: "#ff4702" }} onClick={() => navigate('/')}>Administrar mis imágenes</Button>
-                    <Button fullWidth variant="contained" style={{ backgroundColor: "#ffdacc", color: "#ff4702" }} onClick={logout}>Cerrar sesión</Button>
+                    <h1 id="title">Actualmente en sesión con el correo: {contextUser.email}</h1>
+                    <Button fullWidth variant="contained" id="main-option-button" onClick={() => navigate('/')}>Administrar mis imágenes</Button>
+                    <Button fullWidth variant="contained" id="second-option-button" onClick={logout}>Cerrar sesión</Button>
                 </Container>
             </> : <>
                 <Container style={matches ? { width: "50%" } : { height: "100vh" }}>
-                    <h1 style={{ textAlign: "center" }}>Iniciar Sesión</h1>
+                    <h1 id="title">Iniciar Sesión</h1>
                     <Input
-                        style={{ backgroundColor: "white" }}
+                        id="email-input"
                         placeholder="Email"
                         label="Email"
-                        id="email"
                         onChange={e => setEmail(e.target.value)}
                         type="email"
                         value={email}
@@ -81,19 +80,18 @@ function Login(props) {
                     />
                     <br />
                     <Input
-                        style={{ backgroundColor: "white" }}
+                        id="password-input"
                         placeholder="Password"
                         label="Password"
-                        id="password"
                         onChange={e => setPassword(e.target.value)}
                         type="password"
                         value={password}
                         fullWidth
                     />
                     <p>{error}</p>
-                    <p>¿No tienes cuenta? <span style={{ cursor: "pointer", color: "blue", textDecoration: "underline" }} onClick={() => { navigate("/signup") }}>regístrate</span></p>
-                    <Button fullWidth variant="contained" style={{ backgroundColor: "#ff4702" }} onClick={login}>Iniciar sesión</Button>
-                    <Button fullWidth variant="contained" style={{ backgroundColor: "#ffdacc", color: "#ff4702" }} onClick={() => navigate('/')}>Volver</Button>
+                    <p>¿No tienes cuenta? <span id="register" onClick={() => { navigate("/signup") }}>regístrate</span></p>
+                    <Button fullWidth variant="contained" id="main-option-button" onClick={login}>Iniciar sesión</Button>
+                    <Button fullWidth variant="contained" id="second-option-button" onClick={() => navigate('/')}>Volver</Button>
                 </Container>
             </>}
         </>

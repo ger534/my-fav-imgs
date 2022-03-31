@@ -21,6 +21,9 @@ import Modal from '../modal/modal';
 /* routing */
 import { useNavigate } from "react-router-dom";
 
+/* styling */
+import "./appbar.css"
+
 export default function Appbar(props) {
 
     const contextUser = JSON.parse(sessionStorage.getItem('user'));
@@ -53,11 +56,10 @@ export default function Appbar(props) {
         <>
             <Modal
                 open={openLanWIP} setOpen={setOpenLanWIP}
-                description={<span style={{ fontSize: "30px", fontFamily: "OpenSans", fontWeight: "bold" }}>Contenido en desarrollo</span>}
-                //description={<h1>Contenido en desarrollo</h1>}
+                description={<span id="wip-content">Contenido en desarrollo</span>}
                 actions={<Button onClick={() => { setOpenLanWIP(false) }} color="primary" autoFocus>Ok</Button>} />
 
-            <AppBar position="fixed" style={{ backgroundColor: "#ff4702" }}>
+            <AppBar position="fixed" id="appbar">
                 <Toolbar>
 
                     {/* logo */}

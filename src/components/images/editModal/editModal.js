@@ -15,6 +15,9 @@ import { useNavigate } from 'react-router-dom';
 //HOC
 import LoadingHOC from '../../loading/LoadingHOC';
 
+/* styling */
+import './editModal.css'
+
 const Input = styled('input')({
     display: 'none',
 });
@@ -74,7 +77,7 @@ function EditModal({ selectedImage, editionFlag, setEditionFlag, ...props }) {
                     setLoading(false)
                     navigate(0)
                 }).catch((error) => {
-                    if (error == "FirebaseError: [code=invalid-argument]: The value of property \"image\" is longer than 1048487 bytes.") {
+                    if(String(error).indexOf("image") !== -1 && String(error).indexOf("longer than 1048487 byte") !== -1) {
                         alert(`La imagen es demasiado grande, por favor seleccione otra.`)
                         setLoading(false)
                     } else {
@@ -106,9 +109,8 @@ function EditModal({ selectedImage, editionFlag, setEditionFlag, ...props }) {
                 onClose={setEditionFlag}
             >
                 <DialogContent>
-                    <Box style={{ textAlign: "center" }}
-                    >
-                        <TextField value={title} onChange={(e) => { setTitle(e.target.value) }} fullWidth></TextField> <br></br>
+                    <Box id="upload-form">
+                        <TextField value={title} onChange={(e) => { setTitle(e.target.value) }} fullWidth placeholder='edita el título'></TextField> <br></br>
                         {!newImagePreview ? <img
                             src={selectedImage.image}
                             srcSet={selectedImage.image}
@@ -123,14 +125,14 @@ function EditModal({ selectedImage, editionFlag, setEditionFlag, ...props }) {
                             width={"100%"} />} <br></br>
                         <label htmlFor="contained-button-file-edition">
                             <Input accept="image/*" id="contained-button-file-edition" type="file" onChange={(e) => { setNewImage(e.target.files[0]) }} />
-                            <Button variant="contained" component="span" style={{ backgroundColor: "#ffdacc", color: "#ff4702" }}>
+                            <Button variant="contained" component="span" id="upload-image-button-color">
                                 <PhotoCameraIcon /> Cambiar imagen
                             </Button>
                         </label>
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="contained" onClick={editImage} style={{ backgroundColor: "#ff4702" }}>Guardar cambio</Button>
+                    <Button variant="contained" onClick={editImage} id="submit-button" disabled={title === ""}>Guardar cambio</Button>
                     <Button onClick={() => { setEditionFlag(false) }} color="error" autoFocus>Cancelar</Button>
                 </DialogActions>
             </Dialog>}

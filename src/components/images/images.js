@@ -1,5 +1,5 @@
 import { Button, Container, ImageList, ImageListItem, ImageListItemBar, TextField, useMediaQuery } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import IconButton from '@mui/material/IconButton';
 import { Box } from '@mui/system';
@@ -18,6 +18,9 @@ import { useNavigate } from 'react-router-dom';
 
 import EditModal from './editModal/editModal'
 import LoadingHOC from '../loading/LoadingHOC';
+
+/* styling */
+import './images.css'
 
 const Input = styled('input')({
     display: 'none',
@@ -53,7 +56,7 @@ function Images(props) {
         });
     };
 
-    const getAllImagesByUser = () => {
+    const getAllImagesByUser = useCallback(() => {
         setLoading(true)
         const q = query(collection(db, "images"), where("user", "==", props.user.uid));
         getDocs(q).then(snapshot => {
@@ -66,7 +69,8 @@ function Images(props) {
                 setLoading(false)
             }
         })
-    }
+    }, [db, props.user.uid, setLoading])
+    
 
     const uploadImage = () => {
         setLoading(true)
@@ -80,7 +84,7 @@ function Images(props) {
                 setLoading(false)
                 navigate(0)
             }).catch((error) => {
-                if (error == "FirebaseError: [code=invalid-argument]: The value of property \"image\" is longer than 1048487 bytes.") {
+                if(String(error).indexOf("image") !== -1 && String(error).indexOf("longer than 1048487 byte") !== -1) {
                     alert(`La imagen es demasiado grande, por favor seleccione otra.`)
                     setLoading(false)
                 } else {
@@ -95,7 +99,7 @@ function Images(props) {
         if (props.user.uid) {
             getAllImagesByUser()
         }
-    }, [props.user])
+    }, [props.user, getAllImagesByUser])
 
     useEffect(() => {
         if (!image) {
@@ -138,23 +142,22 @@ function Images(props) {
 
                 <h1>¡Crea tu propio álbum!</h1>
 
-                <Box
-                    style={{ display: "flex", flexDirection: "column" }}
-                >
-                    <Box
-                        style={{ display: "flex", flexDirection: "row", width: "100%" }}
-                    ><TextField onChange={(e) => { setTitle(e.target.value) }} placeholder={"escoge un titulo"} fullWidth></TextField>
-                        <label htmlFor="contained-button-file" style={{ display: "flex" }}>
+                <Box id="upload-form">
+                    <Box id="upload-image">
+                        <TextField onChange={(e) => { setTitle(e.target.value) }} placeholder={"escoge un titulo"} fullWidth></TextField>
+                        <label htmlFor="contained-button-file" id="upload-image-button">
                             <Input accept="image/*" id="contained-button-file" type="file" onChange={(e) => { setImage(e.target.files[0]) }} />
-                            <Button variant="contained" component="span" style={{ backgroundColor: "#ffdacc", color: "#ff4702" }}>
+                            <Button variant="contained" component="span" id="upload-image-button-color">
                                 <PhotoCameraIcon />
-                                {/*matches ? <><PhotoCameraIcon /> Escoge una imagen</> : <PhotoCameraIcon />*/}
                             </Button>
-                        </label></Box>
-                    {image && <div style={{ textAlign: "center" }}><p>Vista previa: </p><img src={preview} srcSet={preview} alt={"preview"} loading="lazy" width={"50%"} /></div>}
-                    <Button variant="contained" onClick={uploadImage} style={{ backgroundColor: "#ff4702", fontWeight: "bold" }} disabled={title === "" || !preview || !props.user.uid}>
+                        </label>
+                    </Box>
+                    {image && <Box id="preview">
+                        <p>Vista previa: </p>
+                        <img src={preview} srcSet={preview} alt={"preview"} loading="lazy" width={"50%"} />
+                    </Box>}
+                    <Button id="submit-button" variant="contained" onClick={uploadImage} disabled={title === "" || !preview || !props.user.uid} fullWidth>
                         Guardar entrada</Button>
-
                 </Box>
                 {images.length === 1 ? <p>Tu álbum tiene <strong>{images.length}</strong> imagen.</p> : <p>Tu álbum tiene <strong>{images.length}</strong> imágenes.</p>}
 
@@ -167,7 +170,7 @@ function Images(props) {
                                 alt={item.title}
                                 loading="lazy"
                             />
-                            <ImageListItemBar style={{ textAlign: "left" }}
+                            <ImageListItemBar id="image-title"
                                 title={item.title}
                                 actionIcon={
                                     <IconButton
