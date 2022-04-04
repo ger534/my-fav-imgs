@@ -12,7 +12,7 @@ Para instalar todos los paquetes y dependencias necesarias.
 
 ### `npm start`
 
-Para correr la en desarrollo [http://localhost:3000](http://localhost:3000)
+Para correr la app en desarrollo [http://localhost:3000](http://localhost:3000)
 ### `npm test`
 
 Para ver la cobertura de código y los resultados de las pruebas.
@@ -25,7 +25,7 @@ Para crear los archivos para luego hacer deploy en producción. Los deja en la c
 
 Para esta prueba estoy usando una aplicación serverless porque el documento estipulaba que debía presentar un repositorio y crear un API habría tomado un repo más (o al menos a mí me gusta trabajar la interfaz por aparte). Escogí firebase como proveedor de servicios de autenticación y almacenamiento porque es sencillo, tengo experiencia en la plataforma y me parece una herramienta útil para aplicaciones sencillas que pueden escalar con el tiempo. Y escogí React porque me parece una biblioteca bastante completa para hacer single page apps y tengo experiencia en ella.
 
-Debo decir que tal vez el proceso de autenticación fue una decisión creativa por mi parte, pero lo hice porque un álbum global donde cualquier usuario puede borrar o editar las imágenes de otro me parece caótico y poco funcional. La idea acá es que cada usuario pueda tener su espacio personal para administrar sus entradas. Como se menciona al inicio, la aplicación está corriendo bajo el dominio [My Fav Images](https://my-fav-imgs.web.app/) y se pueden utilizar las credenciales email: nada@nada.com, password: nadada si no quieren registrarse. También, para algunos elementos gráficos tomé componentes de la biblioteca [Material UI](https://mui.com/).
+Debo decir que tal vez el proceso de autenticación fue una decisión creativa por mi parte, pero lo hice porque un álbum global donde cualquier usuario puede borrar o editar las imágenes de otro me parece caótico y poco funcional. La idea acá es que cada usuario pueda tener su espacio personal para administrar sus entradas. Como se menciona al inicio, la aplicación está corriendo bajo el dominio [My Fav Images](https://my-fav-imgs.web.app/) y se pueden utilizar las credenciales email: nada@nada.com, password: nadada (si no quieren registrarse). También, para algunos elementos gráficos tomé componentes de la biblioteca [Material UI](https://mui.com/).
 
 Fue muy divertido, gracias por la oportunidad.
 
