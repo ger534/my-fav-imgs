@@ -18,7 +18,6 @@ function Login(props) {
 
     const navigate = useNavigate();
 
-    //const contextUser = JSON.parse(sessionStorage.getItem('user'));
     const [user, setUser] = useState(null)
 
     useEffect(() => {
@@ -63,7 +62,6 @@ function Login(props) {
     return (
         <>
             <br></br>
-            {/* BIENVENIDO A ... */}
             {user ? <>
                 <Container style={matches ? { width: "50%" } : { height: "100vh" }}>
                     <h1 id="title">Actualmente en sesión con el correo: {props.user.email}</h1>
