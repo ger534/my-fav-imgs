@@ -6,10 +6,7 @@ import { styled } from '@mui/material/styles';
 
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 
-//firestore
-import { getFirestore } from "firebase/firestore";
-import { doc } from "firebase/firestore";
-import { setDoc } from "firebase/firestore";
+/* routing */
 import { useNavigate } from 'react-router-dom';
 
 //HOC
@@ -17,6 +14,9 @@ import LoadingHOC from '../../loading/LoadingHOC';
 
 /* styling */
 import './editModal.css'
+
+/* images service */
+import imagesService from '../../../services/images/images.service';
 
 const Input = styled('input')({
     display: 'none',
@@ -32,8 +32,6 @@ function EditModal({ selectedImage, editionFlag, setEditionFlag, ...props }) {
     const { setLoading } = props;
 
     const navigate = useNavigate();
-
-    const db = getFirestore();
 
     const convertToBase64 = (file) => {
         return new Promise((resolve, reject) => {
@@ -64,20 +62,15 @@ function EditModal({ selectedImage, editionFlag, setEditionFlag, ...props }) {
     }, [selectedImage])
 
     const editImage = () => {
-
         if (newImagePreview) {
             setLoading(true)
             convertToBase64(newImage).then(img => {
-                setDoc(doc(db, "images", selectedImage.id), {
-                    title: title,
-                    image: img,
-                    user: props.user.uid
-                }).then(() => {
+                imagesService.editImage(title, img, props.user.uid, selectedImage.id).then(() => {
                     alert(`Imagen guardada en la DB.`)
                     setLoading(false)
                     navigate(0)
                 }).catch((error) => {
-                    if(String(error).indexOf("image") !== -1 && String(error).indexOf("longer than 1048487 byte") !== -1) {
+                    if (String(error).indexOf("image") !== -1 && String(error).indexOf("longer than 1048487 byte") !== -1) {
                         alert(`La imagen es demasiado grande, por favor seleccione otra.`)
                         setLoading(false)
                     } else {
@@ -88,11 +81,7 @@ function EditModal({ selectedImage, editionFlag, setEditionFlag, ...props }) {
             })
         } else {
             setLoading(true)
-            setDoc(doc(db, "images", selectedImage.id), {
-                title: title,
-                image: selectedImage.image,
-                user: props.user.uid
-            }).then(() => {
+            imagesService.editImage(title, selectedImage.image, props.user.uid, selectedImage.id).then(() => {
                 alert(`Imagen editada en la DB.`)
                 setLoading(false)
                 navigate(0)
@@ -124,7 +113,7 @@ function EditModal({ selectedImage, editionFlag, setEditionFlag, ...props }) {
                             loading="lazy"
                             width={"100%"} />} <br></br>
                         <label htmlFor="contained-button-file-edition">
-                            <Input accept="image/*" id="contained-button-file-edition" type="file" onChange={(e) => { setNewImage(e.target.files[0]) }} />
+                            <Input placeholder="image" accept="image/*" id="contained-button-file-edition" type="file" onChange={(e) => { setNewImage(e.target.files[0]) }} />
                             <Button variant="contained" component="span" id="upload-image-button-color">
                                 <PhotoCameraIcon /> Cambiar imagen
                             </Button>
@@ -132,7 +121,7 @@ function EditModal({ selectedImage, editionFlag, setEditionFlag, ...props }) {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="contained" onClick={editImage} id="submit-button" disabled={title === ""}>Guardar cambio</Button>
+                    <Button variant="contained" onClick={editImage} id="submit-button" disabled={title === ""}>Guardar cambios</Button>
                     <Button onClick={() => { setEditionFlag(false) }} color="error" autoFocus>Cancelar</Button>
                 </DialogActions>
             </Dialog>}

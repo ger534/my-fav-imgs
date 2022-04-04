@@ -12,4 +12,3 @@ test('renders images component', () => {
   const imagesRender = screen.getByText(/¡Crea tu propio álbum!/i);
   expect(imagesRender).toBeInTheDocument();
 });
-

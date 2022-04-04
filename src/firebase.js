@@ -1,7 +1,4 @@
-// firebase
-
-
-// Initialize Firebase
+// firebase configuration
 const app = {
   apiKey: "AIzaSyBDb8PYFK8_r65NJpdXkKbWTDxGyVKSeGo",
   authDomain: "my-fav-imgs.firebaseapp.com",

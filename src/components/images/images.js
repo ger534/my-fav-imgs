@@ -1,26 +1,27 @@
-import { Button, Container, ImageList, ImageListItem, ImageListItemBar, TextField, useMediaQuery } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
-import IconButton from '@mui/material/IconButton';
-import { Box } from '@mui/system';
-import { styled } from '@mui/material/styles';
-
-
+/* icons */
 import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import IconButton from '@mui/material/IconButton';
 
-//firestore
-import { collection, deleteDoc, getDocs, getFirestore, query, where } from "firebase/firestore";
-import { doc } from "firebase/firestore";
-import { setDoc } from "firebase/firestore";
-import { useNavigate } from 'react-router-dom';
-
+/* components */
 import EditModal from './editModal/editModal'
 import LoadingHOC from '../loading/LoadingHOC';
 
+/* routing */
+import { useNavigate } from 'react-router-dom';
+
 /* styling */
 import './images.css'
+import { Box } from '@mui/system';
+import { styled } from '@mui/material/styles';
+import { Button, Container, ImageList, ImageListItem, ImageListItemBar, TextField, useMediaQuery } from '@mui/material';
+
+/* images service */
+import imagesService from '../../services/images/images.service';
+
 
 const Input = styled('input')({
     display: 'none',
@@ -41,7 +42,7 @@ function Images(props) {
 
     const navigate = useNavigate();
 
-    const db = getFirestore();
+    const mountedRef = useRef(true)
 
     const convertToBase64 = (file) => {
         return new Promise((resolve, reject) => {
@@ -56,35 +57,31 @@ function Images(props) {
         });
     };
 
-    const getAllImagesByUser = useCallback(() => {
+    const getAllImagesByUser = useCallback((user) => {
         setLoading(true)
-        const q = query(collection(db, "images"), where("user", "==", props.user.uid));
-        getDocs(q).then(snapshot => {
-            if (snapshot) {
+        imagesService.getAllImagesByUser(user).then(response => {
+            if (response) {
                 let data = []
-                snapshot.forEach((doc) => {
+                response.forEach((doc) => {
                     data.push({ id: doc.id, ...doc.data() })
                 })
+                if (!mountedRef.current) return null;
                 setImages([...data])
                 setLoading(false)
             }
         })
-    }, [db, props.user.uid, setLoading])
-    
+    }, [setLoading, mountedRef])
 
     const uploadImage = () => {
         setLoading(true)
         convertToBase64(image).then(img => {
-            setDoc(doc(collection(db, "images")), {
-                title: title,
-                image: img,
-                user: props.user.uid
-            }).then(() => {
+            imagesService.uploadImage(title, img, props.user.uid).then(() => {
                 alert(`Imagen guardada en la DB.`)
+                if (!mountedRef.current) return null;
                 setLoading(false)
                 navigate(0)
             }).catch((error) => {
-                if(String(error).indexOf("image") !== -1 && String(error).indexOf("longer than 1048487 byte") !== -1) {
+                if (String(error).indexOf("image") !== -1 && String(error).indexOf("longer than 1048487 byte") !== -1) {
                     alert(`La imagen es demasiado grande, por favor seleccione otra.`)
                     setLoading(false)
                 } else {
@@ -96,9 +93,12 @@ function Images(props) {
     }
 
     useEffect(() => {
-        if (props.user.uid) {
-            getAllImagesByUser()
+        if (props.user) {
+            getAllImagesByUser(props.user.uid)
         }
+        return () => {
+            mountedRef.current = false;   // clean up function
+        };
     }, [props.user, getAllImagesByUser])
 
     useEffect(() => {
@@ -115,9 +115,10 @@ function Images(props) {
     const removeImage = (img) => {
         if (window.confirm('¿desea borrar esta imagen?')) {
             setLoading(true)
-            deleteDoc(doc(db, "images", img.id)).then(() => {
+            imagesService.removeImage(img.id).then(() => {
                 alert(`Imagen borrada de la DB.`)
-                getAllImagesByUser()
+                if (!mountedRef.current) return null;
+                getAllImagesByUser(props.user.uid)
                 setLoading(false)
             });
         } else {
@@ -146,7 +147,7 @@ function Images(props) {
                     <Box id="upload-image">
                         <TextField onChange={(e) => { setTitle(e.target.value) }} placeholder={"escoge un titulo"} fullWidth></TextField>
                         <label htmlFor="contained-button-file" id="upload-image-button">
-                            <Input accept="image/*" id="contained-button-file" type="file" onChange={(e) => { setImage(e.target.files[0]) }} />
+                            <Input accept="image/*" id="contained-button-file" type="file" placeholder='image' onChange={(e) => { setImage(e.target.files[0]) }} />
                             <Button variant="contained" component="span" id="upload-image-button-color">
                                 <PhotoCameraIcon />
                             </Button>
@@ -161,7 +162,7 @@ function Images(props) {
                 </Box>
                 {images.length === 1 ? <p>Tu álbum tiene <strong>{images.length}</strong> imagen.</p> : <p>Tu álbum tiene <strong>{images.length}</strong> imágenes.</p>}
 
-                {props.user.uid ? <ImageList>
+                {props.user ? <ImageList>
                     {images.map((item) => (
                         <ImageListItem key={item.id}>
                             <img
@@ -175,7 +176,7 @@ function Images(props) {
                                 actionIcon={
                                     <IconButton
                                         sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                                        aria-label={`info about ${item.title}`}
+                                        aria-label={`edit ${item.title}`}
                                         onClick={() => openEditionModal(item)}
                                     >
                                         <EditIcon />

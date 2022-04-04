@@ -1,4 +1,4 @@
-import React, { } from 'react';
+import React, { useEffect, useState } from 'react';
 
 /* third party packages */
 import AppBar from '@mui/material/AppBar';
@@ -20,7 +20,11 @@ import "./appbar.css"
 
 export default function Appbar(props) {
 
-    const contextUser = JSON.parse(sessionStorage.getItem('user'));
+    const [user, setUser] = useState(null)
+
+    useEffect(() => {
+        setUser(props.user)
+    }, [props.user])
 
     const navigate = useNavigate();
 
@@ -37,7 +41,7 @@ export default function Appbar(props) {
                     {/* authentication */}
                     <IconButton color="inherit" onClick={() => { navigate("/login") }}>
                         <Badge color="secondary" >
-                            {contextUser ? <PersonIcon /> : <PersonOutlineIcon />}
+                            {user ? <PersonIcon /> : <PersonOutlineIcon />}
                         </Badge>
                     </IconButton>
                 </Toolbar>

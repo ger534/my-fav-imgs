@@ -1,8 +1,5 @@
 import { useState } from "react";
 
-//firebase authentication
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-
 /* third party packages */
 import { Button, Container, Input, useMediaQuery } from '@mui/material';
 
@@ -12,13 +9,14 @@ import { useNavigate } from "react-router-dom";
 /* styling */
 import './signUp.css'
 
+/* auth service */
+import authenticationService from "../../services/authentication/authentication.service";
+
 function SignUp(props) {
 
     const navigate = useNavigate();
 
     const matches = useMediaQuery('(min-width:1200px)');
-
-    const auth = getAuth();
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -27,20 +25,19 @@ function SignUp(props) {
 
     const validateEmail = (email) => {
         return String(email)
-          .toLowerCase()
-          .match(
-            /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          );
-      };
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    };
 
     const signUp = () => {
-        createUserWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                // Signed in
-                const user = userCredential.user;
-                sessionStorage.setItem('user', JSON.stringify(user));
-                navigate("/login")
-            })
+        authenticationService.signUp(email, password).then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            props.onUserChange(user);
+            navigate("/login")
+        })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;

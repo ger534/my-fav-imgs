@@ -1,16 +1,16 @@
-import { useState } from "react";
-
-//firebase authentication
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { useEffect, useState } from "react";
 
 /* third party packages */
 import { Button, Container, Input, useMediaQuery } from '@mui/material';
 
-//routing
+/* routing */
 import { useNavigate } from "react-router-dom";
 
 /* styling */
 import './login.css'
+
+/* auth service */
+import authenticationService from "../../services/authentication/authentication.service";
 
 function Login(props) {
 
@@ -18,9 +18,12 @@ function Login(props) {
 
     const navigate = useNavigate();
 
-    const auth = getAuth();
+    //const contextUser = JSON.parse(sessionStorage.getItem('user'));
+    const [user, setUser] = useState(null)
 
-    const contextUser = JSON.parse(sessionStorage.getItem('user'));
+    useEffect(() => {
+        setUser(props.user)
+    }, [props.user])
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -28,41 +31,42 @@ function Login(props) {
     const [error, setError] = useState("")
 
     const logout = () => {
-        sessionStorage.removeItem('user')
+        authenticationService.signOut(email, password);
+        props.onUserChange(null);
         navigate(0)
     }
 
     const login = () => {
-        signInWithEmailAndPassword(auth, email, password)
+        authenticationService.signIn(email, password)
             .then((userCredential) => {
                 // Signed in
                 const user = userCredential.user;
-                sessionStorage.setItem('user', JSON.stringify(user));
-                navigate(0)
+                props.onUserChange(user);
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                if(errorCode === "auth/user-not-found"){
+                if (errorCode === "auth/user-not-found") {
                     setError("Este email no ha sido registrado.")
-                } else if(errorCode === "auth/internal-error"){
+                } else if (errorCode === "auth/internal-error") {
                     setError("La contraseña no es válida.")
-                } else if(errorCode === "auth/invalid-email"){
+                } else if (errorCode === "auth/invalid-email") {
                     setError("La dirección de correo electrónico no es válida.")
-                }else{
+                } else {
                     setError("Ha ocurrido un error " + errorMessage)
                 }
-                
+
             });
+
     }
 
     return (
         <>
             <br></br>
             {/* BIENVENIDO A ... */}
-            {contextUser ? <>
+            {user ? <>
                 <Container style={matches ? { width: "50%" } : { height: "100vh" }}>
-                    <h1 id="title">Actualmente en sesión con el correo: {contextUser.email}</h1>
+                    <h1 id="title">Actualmente en sesión con el correo: {props.user.email}</h1>
                     <Button fullWidth variant="contained" id="main-option-button" onClick={() => navigate('/')}>Administrar mis imágenes</Button>
                     <Button fullWidth variant="contained" id="second-option-button" onClick={logout}>Cerrar sesión</Button>
                 </Container>
@@ -90,7 +94,7 @@ function Login(props) {
                     />
                     <p>{error}</p>
                     <p>¿No tienes cuenta? <span id="register" onClick={() => { navigate("/signup") }}>regístrate</span></p>
-                    <Button fullWidth variant="contained" id="main-option-button" onClick={login}>Iniciar sesión</Button>
+                    <Button fullWidth variant="contained" id="main-option-button"  onClick={login}>Iniciar sesión</Button>
                     <Button fullWidth variant="contained" id="second-option-button" onClick={() => navigate('/')}>Volver</Button>
                 </Container>
             </>}
