@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
+    "@firebase/rules-unit-testing": "^2.0.2",
     "@mui/icons-material": "^5.5.1",
     "@mui/material": "^5.5.2",
     "@testing-library/jest-dom": "^5.16.3",
@@ -17,10 +18,16 @@
     "react-scripts": "5.0.0",
     "web-vitals": "^2.1.4"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!src/index.js"
+    ]
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --detectOpenHandles --coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
